@@ -1,0 +1,17 @@
+node_modules/
+.env
+.env.*
+
+backend/node_modules/
+backend/uploads/
+
+frontend/node_modules/
+frontend/android/.gradle/
+frontend/android/app/build/
+frontend/android/local.properties
+frontend/ios/Pods/
+frontend/ios/build/
+
+.vscode/
+.idea/
+.DS_Store
