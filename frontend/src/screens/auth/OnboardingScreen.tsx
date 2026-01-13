@@ -1,7 +1,12 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { Images, Icons } from '../constants';
+import { Images, Icons } from '../../constants';
 
 export default function OnboardingScreen({ navigation }: any) {
+    
+    const handleGetStarted = () => {
+        navigation.replace('Login');
+    }
+        
     return (
         <View className="flex-1 bg-primary dark:bg-dark px-6 justify-between">
         {/* Spacer top */}
@@ -16,7 +21,6 @@ export default function OnboardingScreen({ navigation }: any) {
             />
         </View>
 
-        {/* Text */}
         <View className="space-y-2">
             <Text className="text-white dark:text-white text-3xl font-bold">
             Jot Down anything you want to
@@ -28,7 +32,7 @@ export default function OnboardingScreen({ navigation }: any) {
 
         {/* Button */}
         <TouchableOpacity
-            onPress={() => navigation.replace('Login')}
+            onPress={handleGetStarted}
             className="h-14 rounded-full bg-white dark:bg-lightGrey flex-row items-center justify-center mb-10"
         >
             <Text className="text-primary text-lg font-semibold mr-2">
