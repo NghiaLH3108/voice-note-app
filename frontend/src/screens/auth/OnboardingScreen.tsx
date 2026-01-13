@@ -1,5 +1,6 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { Images, Icons } from '../../constants';
+import Button from '../../components/common/Button';
 
 export default function OnboardingScreen({ navigation }: any) {
     
@@ -8,7 +9,7 @@ export default function OnboardingScreen({ navigation }: any) {
     }
         
     return (
-        <View className="flex-1 bg-primary dark:bg-dark px-6 justify-between">
+        <View className="flex-1 bg-primary dark:bg-dark px-8 justify-between">
         {/* Spacer top */}
         <View />
 
@@ -30,20 +31,14 @@ export default function OnboardingScreen({ navigation }: any) {
             </Text>
         </View>
 
-        {/* Button */}
-        <TouchableOpacity
+        <Button
+            title="Let's Get Started"
             onPress={handleGetStarted}
-            className="h-14 rounded-full bg-white dark:bg-lightGrey flex-row items-center justify-center mb-10"
-        >
-            <Text className="text-primary text-lg font-semibold mr-2">
-            Let’s Get Started
-            </Text>
-            <Image
-            source={Icons.arrowRight}
-            resizeMode="contain"
-            className="w-5 h-5"
-            />
-        </TouchableOpacity>
+            bgColor='bg-white'
+            textColor='text-black dark:bg-dark'
+            iconColor='primary'
+        />
+        
         </View>
     );
 }
