@@ -2,14 +2,7 @@ import React, { createContext, useContext, useState, useEffect, Children } from 
 import { Appearance } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useColorScheme } from 'nativewind';
-
-type ThemeMode = 'light' | 'dark' | 'system';
-
-interface ThemContextProps {
-    theme: ThemeMode;
-    isDark: boolean;
-    setTheme: (mode: ThemeMode) => void;
-}
+import { ThemContextProps, ThemeMode } from '../types/theme';
 
 const ThemeContext = createContext<ThemContextProps>(null as any);
 

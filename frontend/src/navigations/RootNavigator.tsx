@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { useAuth } from '../context/AuthContext'
 import AppNavigator from './AppNavigator';
 import AuthNavigator from './AuthNavigator';
+import { useAuth } from '../hooks/useAuth';
 
 export default function RootNavigator() {
     const { user, loading} = useAuth();
@@ -11,7 +11,7 @@ export default function RootNavigator() {
     return (
         <NavigationContainer>
             {/* {user ? <AppNavigator/> : <AuthNavigator/>} */}
-            <AppNavigator/>
+            <AuthNavigator/>
         </NavigationContainer>
     );
 }

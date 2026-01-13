@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { AppStackParamList } from "./types";
+import { AppStackParamList } from "../types/navigations";
 import TabNavigator from "./TabNavigator";
 import NoteDetailScreen from "../screens/notes/NoteDetailScreen";
 import EditNoteScreen from "../screens/notes/EditNoteScreen";

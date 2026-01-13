@@ -1,23 +1,9 @@
 import React, { createContext, useContext, useEffect, useState, } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../api/axios';
+import { User, AuthContextProps } from '../types/user';
 
-export interface User {
-  id: number;
-  fullName: string;
-  email: string;
-  avatar?: string | null;
-  theme?: 'light' | 'dark' | 'system';
-}
-
-interface AuthContextProps {
-  user: User | null;
-  loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-}
-
-const AuthContext = createContext<AuthContextProps>(
+export const AuthContext = createContext<AuthContextProps>(
   null as any
 );
 
@@ -69,17 +55,4 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
     </AuthContext.Provider>
   );
-};
-
-// CUSTOM HOOK
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error(
-      'useAuth must be used inside AuthProvider'
-    );
-  }
-
-  return context;
 };

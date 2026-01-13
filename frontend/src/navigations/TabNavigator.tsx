@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { TabParamList } from "./types";
+import { TabParamList } from "../types/navigations";
 import { colorScheme } from "nativewind";
 import { colors } from "../constants";
 import NotesScreen from "../screens/notes/NotesScreen";
