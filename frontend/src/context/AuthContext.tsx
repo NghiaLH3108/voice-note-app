@@ -1,29 +1,35 @@
-import React, { createContext, useContext, useEffect, useState, } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../api/api';
-import { User, AuthContextProps } from '../types/user';
+import { User } from '../types/user';
 import { loginApi } from '../api/auth.api';
 
-export const AuthContext = createContext<AuthContextProps>(
-  null as any
-);
+
+export interface AuthContextProps {
+  user: User | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+}
+
+export const AuthContext = createContext<AuthContextProps>(null as any);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   const loadUser = async () => {
-      try {
-        const storedUser = await AsyncStorage.getItem('user');
-        const token = await AsyncStorage.getItem('token');
+    try {
+      const storedUser = await AsyncStorage.getItem('user');
+      const token = await AsyncStorage.getItem('token');
 
-        if (storedUser && token) {
-          setUser(JSON.parse(storedUser));
-        }
-      } finally {
-        setLoading(false);
+      if (storedUser && token) {
+        setUser(JSON.parse(storedUser));
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // AUTO LOGIN
   useEffect(() => {
@@ -44,8 +50,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // LOGOUT
   const logout = async () => {
-    await AsyncStorage.clear();
-    setUser(null);
+    try {
+      await AsyncStorage.multiRemove(['token', 'user']);
+    } catch (error) {
+      console.warn('Logout error:', error);
+    } finally {
+      setUser(null);
+    }
   };
 
   return (

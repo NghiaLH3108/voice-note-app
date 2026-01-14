@@ -9,10 +9,9 @@ import {
 } from '../../utils/validators';
 import { useState } from 'react';
 import { registerApi } from '../../api/auth.api';
-import { useToast } from '../../hooks/useToast';
+import Toast from 'react-native-toast-message';
 
 export default function RegisterScreen({ navigation }: any) {
-  const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -58,11 +57,21 @@ export default function RegisterScreen({ navigation }: any) {
 
       await registerApi(trimmedData);
 
-      showToast('success', 'Register successful');
+      Toast.show({
+        type: 'success',
+        text1: 'Register successful',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
       navigation.goBack();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Register failed';
-      showToast('error', errorMessage);
+      Toast.show({
+        type: 'error',
+        text1: errorMessage,
+        visibilityTime: 2000,
+        autoHide: true,
+      });
     } finally {
       setLoading(false);
     }
