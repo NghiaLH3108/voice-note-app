@@ -13,7 +13,7 @@ interface ToastContextProps {
     removeToast: (id: number) => void;
 }
 
-const ToastContext = createContext<ToastContextProps>(null as any);
+export const ToastContext = createContext<ToastContextProps>(null as any);
 
 export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
     const [queue, setQueue] = useState<ToastItem[]>([]);
@@ -38,5 +38,3 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
         
     );
 };
-
-export const useToastContext = () => useContext(ToastContext);

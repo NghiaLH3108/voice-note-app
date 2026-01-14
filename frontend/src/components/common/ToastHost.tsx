@@ -1,9 +1,9 @@
 import { View } from "react-native";
-import { useToastContext } from "../../context/ToastContext";
 import Toast from "./Toast";
+import { useToast } from "../../hooks/useToast";
 
 export const ToastHost = () => {
-    const { queue, removeToast } = useToastContext();
+    const { queue, removeToast } = useToast();
 
     return (
         <View className="absolute inset-0" pointerEvents="box-none">
