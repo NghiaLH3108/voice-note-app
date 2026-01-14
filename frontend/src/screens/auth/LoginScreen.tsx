@@ -1,28 +1,17 @@
 import { Text, TouchableOpacity, View } from 'react-native';
-import { useToast } from '../../hooks/useToast';
 import { useEffect, useState } from 'react';
 import InputField from '../../components/common/InputField';
 import Button from '../../components/common/Button';
 import {
   validateEmail,
-  validateFullName,
   validatePassword,
 } from '../../utils/validators';
-import { loginApi } from '../../api/auth.api';
 import { useAuth } from '../../hooks/useAuth';
+import Toast from 'react-native-toast-message';
 
 export default function LoginScreen({ navigation }: any) {
   const { login } = useAuth();
-  const { showToast } = useToast();
-  // const testQueue = () => {
-  //     showToast('info', 'Uploading audio...', 'top');
-  //     setTimeout(() => showToast('success', 'Audio uploaded', 'top'), 300);
-  //     setTimeout(() => showToast('success', 'Note saved', 'top'), 600);
-  //     setTimeout(() => showToast('warning', 'Sync pending', 'top'), 900);
-  // };
-
   const [loading, setLoading] = useState(false);
-
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -62,10 +51,20 @@ export default function LoginScreen({ navigation }: any) {
 
       await login(trimmedData.email, trimmedData.password);
 
-      showToast('success', 'Login successful');
+      Toast.show({
+        type: 'success',
+        text1: 'Login successful',
+        visibilityTime: 2000,
+        autoHide: true,
+      });
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Login failed';
-      showToast('error', errorMessage);
+      Toast.show({
+        type: 'error',
+        text1: errorMessage,
+        visibilityTime: 2000,
+        autoHide: true,
+      });
     } finally {
       setLoading(false);
     }
@@ -73,9 +72,6 @@ export default function LoginScreen({ navigation }: any) {
 
   const navigateRegister = () => navigation.navigate('Register');
 
-  useEffect(() => {
-    // testQueue();
-  }, []);
   return (
     <View className="flex-1 bg-white">
       <View className="mt-10 py-4 px-8">
