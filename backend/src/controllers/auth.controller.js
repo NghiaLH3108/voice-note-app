@@ -1,58 +1,76 @@
-const pool = require('../config/db');
+const db = require('../config/db.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
   const { fullName, email, password } = req.body;
 
-  if (!email || !password)
+  // Check missing fields
+  if (!fullName || !email || !password)
     return res.status(400).json({ message: 'Missing fields' });
 
-  const hash = await bcrypt.hash(password, 10);
-
   try {
-    await pool.query(
+    // Check email exists
+    const [existingUsers] = await db.query('SELECT id FROM users WHERE email = ?', [email]);
+    if (existingUsers.length > 0) {
+      return res.status(409).json({ message: 'Email already exists' });
+    }
+
+    // Hash password
+    const hash = await bcrypt.hash(password, 10);
+
+    // Insert into database
+    await db.query(
       'INSERT INTO users(full_name,email,hash_password) VALUES (?,?,?)',
       [fullName, email, hash]
     );
-    res.json({ message: 'Register success' });
+    res.status(201).json({ message: 'Register success' });
   } catch (error) {
     console.log("Error in register controller", error);
-    res.status(400).json({ message: 'Email exists' });
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
-  const [rows] = await pool.query(
-    'SELECT * FROM users WHERE email=?',
-    [email]
-  );
+  // Check missing fields
+  if (!email || !password)
+    return res.status(400).json({ message: 'Email and password are required' });
 
-  if (!rows.length)
-    return res.status(400).json({ message: 'User not found' });
+  try {
+    // Find user
+    const [rows] = await db.query('SELECT * FROM users WHERE email=?', [email]);
+    if (!rows.length) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
 
-  const user = rows[0];
-  const match = await bcrypt.compare(password, user.hash_password);
+    // Check password
+    const user = rows[0];
+    const match = await bcrypt.compare(password, user.hash_password);
+    if (!match) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
 
-  if (!match)
-    return res.status(400).json({ message: 'Wrong password' });
+    // Set token and response user
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
 
-  const token = jwt.sign(
-    { id: user.id, email: user.email },
-    process.env.JWT_SECRET,
-    { expiresIn: '7d' }
-  );
-
-  res.json({
-    token,
-    user: {
-      id: user.id,
-      fullName: user.full_name,
-      email: user.email,
-      avatar: user.avatar,
-      theme: user.theme,
-    },
-  });
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        fullName: user.full_name,
+        email: user.email,
+        avatar: user.avatar,
+        theme: user.theme,
+      },
+    });
+  } catch (error) {
+    console.error("Error in login controller:", error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };

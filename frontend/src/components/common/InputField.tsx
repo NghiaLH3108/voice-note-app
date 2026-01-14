@@ -3,7 +3,7 @@ import { Text, TextInput, TextInputProps, View } from "react-native";
 
 interface InputFieldProps extends TextInputProps {
     label: string;
-    caption?: string;
+    caption?: string | null;
     error?: boolean;
 }
 

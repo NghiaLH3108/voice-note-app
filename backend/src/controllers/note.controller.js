@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const pool = require('../config/db.js');
 
 exports.createNote = async (req, res) => {
   const { title, content } = req.body;
