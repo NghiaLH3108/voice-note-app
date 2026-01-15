@@ -23,10 +23,10 @@ export default function OnboardingScreen({ navigation }: any) {
 
       <View className="space-y-2">
         <Text className="text-white dark:text-white text-3xl font-bold">
-          Jot Down anything you want to
+          Jot Down anything you want
         </Text>
         <Text className="text-white dark:text-white text-3xl font-bold">
-          achieve, today or in the future
+          to achieve, today or in the future
         </Text>
       </View>
 

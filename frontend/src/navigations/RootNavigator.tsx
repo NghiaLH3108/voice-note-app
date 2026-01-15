@@ -11,7 +11,6 @@ export default function RootNavigator() {
     return (
         <NavigationContainer>
             {user ? <AppNavigator/> : <AuthNavigator/>}
-            {/* <AuthNavigator/> */}
         </NavigationContainer>
     );
 }
