@@ -5,7 +5,7 @@ import { User } from '../types/user';
 import { loginApi } from '../api/auth.api';
 
 
-export interface AuthContextProps {
+interface AuthContextProps {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
