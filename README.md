@@ -41,7 +41,7 @@ Project được xây dựng theo mô hình **Mobile App + Backend API + Databas
 - bcrypt (Hash password)
 
 ### Database
-- MySQL 9.0
+- MySQL 9.5
 
 ## 📁 Cấu trúc thư mục
 

@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { Images, Icons } from '../../constants';
+import { Images } from '../../constants';
 import Button from '../../components/common/Button';
 
 export default function OnboardingScreen({ navigation }: any) {

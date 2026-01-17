@@ -1,44 +1,55 @@
-import React, { createContext, useContext, useState, useEffect, Children } from 'react';
-import { Appearance } from 'react-native';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useColorScheme } from 'nativewind';
+import { useColorScheme as useSystemScheme } from 'react-native';
 import { ThemContextProps, ThemeMode } from '../types/theme';
+import { updateThemeApi } from '../api/user.api';
 
-const ThemeContext = createContext<ThemContextProps>(null as any);
+export const ThemeContext = createContext<ThemContextProps>(null as any);
 
-export const ThemeProvider = ({ children } : { children: React.ReactNode }) => {
-    const systemScheme = Appearance.getColorScheme();
-    const { setColorScheme } = useColorScheme();
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  const systemScheme = useSystemScheme();
+  const { setColorScheme } = useColorScheme();
 
-    const [ theme, setThemeState ] = useState<ThemeMode>('system');
+  const [theme, setThemeState] = useState<ThemeMode>('system');
 
-    const applyTheme = (mode: ThemeMode) => {
-        setThemeState(mode);
-        AsyncStorage.setItem('theme', mode);
+  const applyTheme = async (mode: ThemeMode, sync = true) => {
+    setThemeState(mode);
+    await AsyncStorage.setItem('theme', mode);
 
-        if (mode === 'system') {
-            setColorScheme(systemScheme === 'dark' ? 'dark' : 'light');
-        } else {
-            setColorScheme(mode);
-        }
-    };
+    const appliedScheme = mode === 'system' ? systemScheme ?? 'light' : mode;
 
-    useEffect(() => {
-        (async () => {
-            const savedTheme = await AsyncStorage.getItem('theme');
-            if (savedTheme) {
-                applyTheme(savedTheme as ThemeMode);
-            } else {
-                applyTheme('system');
-            }
-        })();
-    }, []);
+    setColorScheme(appliedScheme === 'unspecified' ? 'light' : appliedScheme);
 
-    const isDark = theme ==='dark' || (theme === 'system' && systemScheme === 'dark');
+    if (sync) {
+      try {
+        await updateThemeApi(mode);
+      } catch (err) {
+        console.warn('Update theme failed');
+      }
+    }
+  };
 
-    return (
-        <ThemeContext.Provider value={{ theme, isDark, setTheme: applyTheme }}>
-            { children }
-        </ThemeContext.Provider>
-    )
-}
+  useEffect(() => {
+    (async () => {
+      const savedTheme = await AsyncStorage.getItem('theme');
+      if (savedTheme) {
+        applyTheme(savedTheme as ThemeMode, false);
+      }
+    })();
+  }, []);
+
+  const isDark =
+    theme === 'dark' || (theme === 'system' && systemScheme === 'dark');
+
+  return (
+    <ThemeContext.Provider value={{ theme, isDark, setTheme: applyTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
