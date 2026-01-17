@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import api from '../api/api';
 import { User } from '../types/user';
 import { loginApi } from '../api/auth.api';
+import { useTheme } from '../hooks/useTheme';
 
 
 interface AuthContextProps {
@@ -17,6 +17,7 @@ export const AuthContext = createContext<AuthContextProps>(null as any);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const { setTheme} = useTheme();
 
   const loadUser = async () => {
     try {
@@ -24,7 +25,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const token = await AsyncStorage.getItem('token');
 
       if (storedUser && token) {
-        setUser(JSON.parse(storedUser));
+        const user = JSON.parse(storedUser);
+        setUser(user);
+
+        if (user.theme) {
+          setTheme(user.theme, false);
+        }
       }
     } finally {
       setLoading(false);
@@ -46,6 +52,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await AsyncStorage.setItem('user', JSON.stringify(user));
 
     setUser(user);
+
+    if (user.theme) {
+      setTheme(user.theme, false);
+    }
   };
 
   // LOGOUT

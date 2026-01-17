@@ -19,10 +19,14 @@ exports.register = async (req, res) => {
     // Hash password
     const hash = await bcrypt.hash(password, 10);
 
+    const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+      fullName
+    )}&background=BE886A&color=fff`;
+
     // Insert into database
     await db.query(
-      'INSERT INTO users(full_name,email,hash_password) VALUES (?,?,?)',
-      [fullName, email, hash]
+      'INSERT INTO users(full_name,email,hash_password,avatar) VALUES (?,?,?,?)',
+      [fullName, email, hash,avatar]
     );
     res.status(201).json({ message: 'Register success' });
   } catch (error) {
