@@ -17,13 +17,13 @@ export default function NavBar({
   title = '',
   boxShadow = false,
   showBack = true,
-  backLabel = 'Back to Login',
+  backLabel = 'Back',
   rightText,
   onRightPress,
 }: NavBarProps) {
   return (
-    <View className="absolute top-0 right-0 left-0 bg-white dark:bg-dark">
-      <View className="h-24 pt-8 px-6 flex-row items-center justify-between">
+    <View className="absolute top-8 right-0 left-0 bg-white dark:bg-dark">
+      <View className="h-24 pt-2 px-6 flex-row items-center justify-between">
         {/* LEFT */}
         <View className="flex-row items-center">
           {showBack && (
@@ -47,8 +47,8 @@ export default function NavBar({
         {/* RIGHT */}
         <View>
           {rightText && (
-            <TouchableOpacity onPress={onRightPress}>
-              <Text className="text-primary text-sm font-medium">
+            <TouchableOpacity onPress={onRightPress} className='bg-primary py-2 px-4 rounded-full'>
+              <Text className="text-white dark:text-primary text-xl font-medium">
                 {rightText}
               </Text>
             </TouchableOpacity>

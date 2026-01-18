@@ -16,16 +16,16 @@ import { ModelProvider } from './src/context/ModalContext';
 
 function App() {
   return (
-    <ModelProvider>
-      <SafeAreaProvider>
-        <ThemeProvider>
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <ModelProvider>
           <AuthProvider>
             <RootNavigator />
             <Toast config={toastConfig} />
           </AuthProvider>
-        </ThemeProvider>
-      </SafeAreaProvider>
-    </ModelProvider>
+        </ModelProvider>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }
 

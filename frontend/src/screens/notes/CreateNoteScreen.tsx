@@ -1,14 +1,49 @@
-import { Text, View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useState } from 'react';
+import { ScrollView, TextInput, View } from 'react-native';
+import ImageGrid from '../../components/image/ImageGrid';
+import AudioList from '../../components/audio/AudioList';
 
 export default function CreateNoteScreen() {
-    return (
-        <SafeAreaProvider>
-                    <View className="flex-1 items-center justify-center bg-green">
-                        <Text className="text-xl font-bold text-white-500">
-                            Create Note Screen!
-                        </Text>
-                    </View>
-                </SafeAreaProvider>
-    );
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [images, setImages] = useState<string[]>([]);
+  const [audios, setAudios] = useState<string[]>([]);
+
+  return (
+    <ScrollView className="bg-white dark:bg-dark mt-28 p-8">
+      <TextInput
+        placeholder="Title here"
+        value={title}
+        onChangeText={setTitle}
+        className="text-4xl font-bold text-primary dark:text-white mt-6"
+      />
+      <TextInput
+        multiline
+        placeholder="Content here"
+        value={content}
+        onChangeText={setContent}
+        className="mt-4 text-xl text-black dark:text-white leading-6"
+      />
+
+      <View className="h-px bg-lightGrey my-10" />
+
+      <ImageGrid
+        images={images}
+        onAdd={() => {}}
+        onRemove={i =>
+          setImages(prev => prev.filter((_, index) => index !== 1))
+        }
+      />
+
+      <View className="h-px bg-lightGrey my-10" />
+
+      <AudioList
+        audios={audios}
+        onAdd={() => {}}
+        onRemove={i =>
+          setAudios(prev => prev.filter((_, index) => index !== 1))
+        }
+      />
+    </ScrollView>
+  );
 }

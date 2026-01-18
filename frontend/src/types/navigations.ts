@@ -6,6 +6,7 @@ export type AuthStackParamList = {
 
 export type AppStackParamList = {
     Tabs: undefined;
+    CreateNote: undefined;
     NoteDetail: { id: number };
     EditNote: { id: number };
 };

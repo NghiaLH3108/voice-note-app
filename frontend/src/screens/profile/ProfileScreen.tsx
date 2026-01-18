@@ -24,7 +24,7 @@ export default function ProfileScreen() {
   };
 
   return (
-    <View className="flex-1 bg-white dark:bg-dark px-6 pt-10 mt-20">
+    <View className="flex-1 bg-white dark:bg-dark px-6 pt-10 mt-28">
       {/* ===== USER INFO ===== */}
       <View className="items-center">
         <View className="flex-row">
